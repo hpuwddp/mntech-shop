@@ -1,0 +1,74 @@
+server:
+  port: 8084
+spring:
+  application:
+    name: inventory-service
+  datasource:
+    driver-class-name: org.postgresql.Driver
+    url: jdbc:postgresql://172.17.0.1:5432/shopdb?useUnicode=true&characterEncoding=utf8&serverTimezone=Asia/Shanghai
+    username: xxx
+    password: xxxxxx
+    type: com.alibaba.druid.pool.DruidDataSource
+    druid:
+      # 连接池配置
+      initial-size: 25
+      min-idle: 20
+      max-active: 60
+      max-wait: 5000
+      time-between-eviction-runs-millis: 60000
+      min-evictable-idle-time-millis: 300000
+      validation-query: SELECT 1
+      test-while-idle: true
+      test-on-borrow: false
+      test-on-return: false
+      pool-prepared-statements: true
+      max-pool-prepared-statement-per-connection-size: 20
+      # 监控配置
+      stat-view-servlet:
+        enabled: true
+        url-pattern: /druid/*
+        login-username: admin
+        login-password: admin
+      filter:
+        stat:
+          enabled: true
+          log-slow-sql: true
+          slow-sql-millis: 2000
+  jackson:
+    date-format: yyyy-MM-dd HH:mm:ss
+    time-zone: Asia/Shanghai
+    serialization:
+      write-dates-as-timestamps: false
+  cloud:
+    nacos:
+      discovery:
+        group: PAY_GROUP
+        server-addr: nacos:8848
+
+# MyBatis-Plus配置
+mybatis-plus:
+  mapper-locations: classpath*:mapper/*.xml
+  type-aliases-package: com.mntech.shop.inventory.model
+  global-config:
+    db-config:
+      id-type: assign_uuid
+      logic-delete-field: deleted
+      logic-delete-value: 1
+      logic-not-delete-value: 0
+  configuration:
+    map-underscore-to-camel-case: true
+    cache-enabled: false
+    # ✅ 打印 SQL
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+
+# ✅ 只开 SQL 相关日志
+logging:
+  level:
+    root: WARN
+    com.mntech.shop.order.dao: DEBUG
+    com.mntech.shop.order.mapper: DEBUG
+    org.mybatis: DEBUG
+    java.sql: DEBUG
+    java.sql.ResultSet: DEBUG
+    java.sql.Statement: DEBUG
+    java.sql.PreparedStatement: DEBUG

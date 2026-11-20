@@ -1,0 +1,19 @@
+spring:
+  application:
+    name: order-service  # 你的支付服务名
+  config:
+    import: "nacos:payment-service.yaml?group=PAY_GROUP"
+  cloud:
+    nacos:
+      discovery:
+        # 指向你外部启动的 Nacos Server 地址
+        server-addr: nacos:8848
+        # 如果需要指定命名空间或分组，可以在这里配置
+        # namespace: dev
+        group: PAY_GROUP
+      config:
+        server-addr: nacos:8848  # Nacos服务器地址
+        file-extension: yaml         # 配置文件格式
+#        namespace: dev-env           # 可选，指定命名空间实现环境隔离
+        group: PAY_GROUP         # 对应Nacos控制台的Group
+

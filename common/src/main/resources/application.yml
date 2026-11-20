@@ -1,0 +1,11 @@
+## 微信支付配置
+#wechat:
+#  pay:
+#    merchant-id: xxx
+#    merchant-serial-number: xxxxxx
+#    private-key-path: /app/order/apiclient_key.pem  # 证书私钥路径
+#    api-v3-key: xxxxx
+#    public-key-path: /app/order/pub_key.pem # 证书私钥路径
+#    public-key-id: xxxxx
+#    app-id: xxxxx
+#    notify-url: https://www.xxxxxx.site/order/api/pay/notify

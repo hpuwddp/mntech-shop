@@ -1,0 +1,62 @@
+# application.yml
+server:
+  port: 8085
+
+spring:
+  application:
+    name: mntech-shop-order-consumer
+
+  datasource:
+    driver-class-name: org.postgresql.Driver
+    url: jdbc:postgresql://172.17.0.1:5432/shopdb?useUnicode=true&characterEncoding=utf8&serverTimezone=Asia/Shanghai
+    username: shopuser
+    password: hpufYd7281767@123sq
+    type: com.alibaba.druid.pool.DruidDataSource
+    # Druid 专用配置
+    druid:
+      # 连接池配置
+      max-active: 20
+      initial-size: 5
+      min-idle: 5
+      max-wait: 30000
+      # 检测连接有效性
+      test-while-idle: true
+      validation-query: SELECT 1
+      test-on-borrow: false
+      test-on-return: false
+      # 连接保活
+      keep-alive: true
+      # 连接回收
+      time-between-eviction-runs-millis: 60000
+      min-evictable-idle-time-millis: 300000
+      # 移除超时连接
+      remove-abandoned: true
+      remove-abandoned-timeout: 180
+
+rocketmq:
+  name-server: 124.220.81.82:9876
+  # 关闭VIP通道，和Broker保持一致
+  consumer:
+    group: seckill_order_consumer_group
+    properties:
+      com.rocketmq.sendMessageWithVIPChannel: false
+    # 最大重试次数：3次，重试完毕进入死信队列 DLQ
+    max-retry-times: 3
+    # 单条消息消费最长时间15秒
+    consume-timeout: 15000
+
+
+# MyBatis Plus
+mybatis-plus:
+  configuration:
+    map-underscore-to-camel-case: true
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+  global-config:
+    db-config:
+      logic-delete-field: deleted
+      logic-delete-value: 1
+      logic-not-delete-value: 0
+
+logging:
+  level:
+    com.mntech: debug

@@ -1,0 +1,51 @@
+services:
+
+
+  rocketmq-server:
+    image: registry.cn-hangzhou.aliyuncs.com/jeecgdocker/rocketmq:4.9.6
+    container_name: aliyunrocketmq
+    restart: unless-stopped
+    ports:
+     - "9876:9876"
+    command: sh mqnamesrv
+    networks:
+      - app_network
+
+
+  rocketmq-broker:
+    image: registry.cn-hangzhou.aliyuncs.com/jeecgdocker/rocketmq:4.9.6
+    container_name: aliyunrocketmqbroker
+    restart: unless-stopped
+    ports:
+     - "10911:10911"
+     - "10909:10909"
+    environment:
+     - NAMESRV_ADDR=rocketmq-server:9876
+     - BROKER_IP1=124.220.81.82
+    volumes:
+      - /data/rocketmq/logs:/home/rocketmq/logs
+      - /data/rocketmq/store:/home/rocketmq/store
+      - /data/rocketmq/conf/broker.conf:/home/rocketmq/conf/broker.conf
+    command: sh mqbroker -n rocketmq-server:9876 -c /home/rocketmq/conf/broker.conf
+    depends_on:
+      - rocketmq-server
+    networks:
+      - app_network
+
+  rocketmq-dashboard:
+    image: registry.cn-hangzhou.aliyuncs.com/jeecgdocker/rocketmq-dashboard:latest
+    container_name: rocketmq-dashboard
+    restart: unless-stopped
+    ports:
+      - "8088:8080"
+    environment:
+      - JAVA_OPTS=-Drocketmq.namesrv.addr=rocketmq-server:9876
+    depends_on:
+      - rocketmq-server
+    networks:
+      - app_network
+
+# ========== 定义网络 ==========
+networks:
+  app_network:
+    driver: bridge
